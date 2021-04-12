@@ -4,18 +4,25 @@ import { fifaData } from './fifa.js';
 
 /* 🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀 Task 1: 🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀
 Practice accessing data by console.log-ing the following pieces of data note, you may want to filter the data first 😉*/
-
 //(a) Home Team name for 2014 world cup final
-
+const year2014 = fifaData.filter(i => i["Year"] === 2014 && i["Stage"] === "Final");
+console.log(year2014[0]["Home Team Name"]);
+console.log(year2014);
 //(b) Away Team name for 2014 world cup final
-
+console.log(year2014[0]["Away Team Name"]);
 //(c) Home Team goals for 2014 world cup final
-
+const homeGoals = year2014[0]["Home Team Goals"];
+console.log(homeGoals);
 //(d) Away Team goals for 2014 world cup final
-
+const awayGoals = year2014[0]["Away Team Goals"];
+console.log(awayGoals);
 //(e) Winner of 2014 world cup final */
-
-
+if (homeGoals > awayGoals) {
+    console.log(year2014[0]["Home Team Name"])
+} else {
+    console.log(year2014[0]["Away Team Name"])
+}
+ 
 /* 🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀 Task 2: 🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀 
 Use getFinals to do the following:
 1. Receive data as a parameter
@@ -24,10 +31,11 @@ Use getFinals to do the following:
 hint - you should be looking at the stage key inside of the objects
 */
 
-function getFinals(/* code here */) {
-   /* code here */
+function getFinals(data) {
+   return data.filter(i => i["Stage"] === "Final");
 }
 
+// console.log(getFinals(fifaData));
 
 
 /* 🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀 Task 3: 🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀
@@ -36,10 +44,12 @@ Use the higher-order function called getYears to do the following:
 2. Receive a callback function getFinals from task 2 
 3. Return an array called years containing all of the years in the getFinals data set*/
 
-function getYears(/* code here */) {
-    /* code here */
+function getYears(arr, getFinals) {
+    const years = getFinals(arr).map(i => i["Year"]);
+    return years;
 }
 
+console.log(getYears(fifaData, getFinals));
 
 
 /* 🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀 Task 4: 🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀
@@ -49,11 +59,17 @@ Use the higher-order function getWinners to do the following:
 3. Determines the winner (home or away) of each `finals` game. 
 4. Returns the names of all winning countries in an array called `winners` */ 
 
-function getWinners(/* code here */) {
-    /* code here */
+function getWinners(arr, getFinals) {
+    const winners = getFinals(arr).map(i => {
+        if(i["Home Team Goals"] > i["Away Team Goals"]) {
+        return (i["Home Team Name"])
+        } else {
+        return (i["Away Team Name"])
+        }});
+    return winners;
 }
 
-
+console.log(getWinners(fifaData, getFinals));
 
 /* 🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀 Task 5: 🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀 
 Use the higher-order function getWinnersByYear to do the following:
@@ -65,10 +81,16 @@ Use the higher-order function getWinnersByYear to do the following:
 hint: the strings returned need to exactly match the string in step 4.
  */
 
-function getWinnersByYear(/* code here */) {
-    /* code here */
+// getYears(arr, getFinals) gives array of years
+//getWinners(arr, getFinals) gives array of winners
+
+function getWinnersByYear(arr, getYears, getWinners) {
+    const years = getYears(arr, getFinals);
+    const winners = getWinners(arr, getFinals);
+    return years.map((year, i) => `In ${year}, ${winners[i]} won the world cup!`);
 }
 
+console.log(getWinnersByYear(fifaData,getYears,getWinners));
 
 
 /* 🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀 Task 6: 🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀
@@ -80,12 +102,17 @@ Use the higher order function getAverageGoals to do the following:
  
  Example of invocation: getAverageGoals(getFinals(fifaData));
 */
+// Given the array of final games, add up all Home Team Goals divided by arr.length 
+// Add all away team goals divided  by arr.length
 
-function getAverageGoals(/* code here */) {
-   /* code here */
+function getAverageGoals(finalGameData) {
+    const homeTotal = finalGameData.reduce((totalHome, item) => totalHome + item["Home Team Goals"],0)
+    const awayTotal = finalGameData.reduce((totalAway, item) => totalAway + item["Away Team Goals"],0)
+    const goalTotal = homeTotal + awayTotal;
+    return (goalTotal/finalGameData.length).toFixed(2);
 }
 
-
+console.log(getAverageGoals(getFinals(fifaData)));
 
 
 /// 🥅 STRETCH 🥅 ///
